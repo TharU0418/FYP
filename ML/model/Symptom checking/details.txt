@@ -1,0 +1,2 @@
+rf_model.ipynb - This is the orginal one
+All the coorect models are in the server folder with that flask file
