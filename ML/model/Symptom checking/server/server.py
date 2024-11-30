@@ -22,6 +22,7 @@ class CustomLabelEncoder:
 # Initialize Flask app
 app = Flask(__name__)
 
+
 # Load the saved models and encoders
 with open('random_forest_model.pkl', 'rb') as model_file:
     rf_model = pickle.load(model_file)
