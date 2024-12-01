@@ -1,0 +1,4 @@
+Test model file this is where I am going to add diseases and symptoms one by one while checking the model. 
+All the original module files are in this folder and the original training file is also in this folder 
+inside the data folder it says if I call you NewDB where is the original database file and additional 
+symptom description in other symptom files.

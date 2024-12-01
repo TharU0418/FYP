@@ -1,0 +1,8 @@
+MEDCHAT - Inside this folder the next.JS web app   
+
+ML  - Include all the models that train 
+
+	Symptom checking  - Inside this folder as the trained model DB and server files for the symptom-checking part. 
+	Test Model - testing all the model's accuracy
+
+ Server - Save the original Flask server file with the original model files.

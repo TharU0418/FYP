@@ -1,0 +1,9 @@
+This is where symptom-checking part models and server files are stored. 
+The DATA folder stores all the data databases. And in the Models 
+folder all the correct models. 
+And inside the MODLES_OLD fault include the old models.
+
+Inside the serve folder include the flask python file and the 
+models files.
+
+rf_model.ipynb - This is the orginal one
