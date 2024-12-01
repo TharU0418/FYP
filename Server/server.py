@@ -17,6 +17,14 @@ def getIllnessCSV():
     global df_illness
     df_illness = pd.read_csv('DB/Illness.csv')
 
+def getIllnessDesription():
+    global df_diseases_list
+    df_diseases_list = pd.read_csv('DB/symptom_Description.csv')
+
+def getPreventionDetails():
+    global df_preventions
+    df_preventions = pd.read_csv('DB/symptom_precaution.csv')
+
 
 # Define the CustomLabelEncoder class (same as in your training script)
 class CustomLabelEncoder:
@@ -85,6 +93,8 @@ def get_illess_name():
         data = request.json
         diseases_input = data['diseases_input']
 
+        print('diseases_input', diseases_input)
+
         matching_symptoms = df_illness[df_illness['Disease'] == diseases_input]
         matching_symptoms = matching_symptoms.iloc[0, 1:].dropna().unique()
 
@@ -113,17 +123,12 @@ def predictthediseases():
 
         cleaned_input = strip_to_basic_token(symptoms)
 
-        print('cleaned_input', cleaned_input)
-
-
         user_input_encoded = pd.DataFrame(mlb.transform([cleaned_input]), columns=mlb.classes_)
 
-        print('user_input_encoded', user_input_encoded)
 
         final_user_input = pd.concat([pd.DataFrame(columns=mlb.classes_), user_input_encoded], axis=0)
         final_user_input = final_user_input.drop(columns=['Disease'], errors='ignore')
 
-        print('final_user_input', final_user_input)
 
         # Predict the class for the user input
         user_pred = rf_model.predict(final_user_input)
@@ -139,6 +144,38 @@ def predictthediseases():
 
     except Exception as e:
         return jsonify({"error" : str(e)}), 500
+    
+
+# Get illness preventions and treatments
+@app.route('/getpreventions', methods=['POST'])
+def getPreventions():
+    try:
+        getIllnessDesription()
+        getPreventionDetails()
+
+        data = request.json
+        diseases = data.get('diseases')
+
+        discription = df_diseases_list[df_diseases_list['Disease'] == diseases]
+        discription = discription.values[0][1]
+
+        print('discription', discription)
+
+        prevention_list = []
+
+        prevention_row = df_preventions[df_preventions['Disease'] == diseases]
+
+        if not prevention_row.empty:
+            for i in range(1, len(prevention_row.columns)):
+                prevention = prevention_row.iloc[0, i]
+                if pd.notna(prevention):
+                    prevention_list.append(prevention)
+
+        return jsonify({"description" : discription, "prevntion_list" : prevention_list})
+
+
+    except Exception as e:
+        return jsonify({"error" : str(e)}), 500    
 
 if __name__ == '__main__':
     app.run(debug=True)
