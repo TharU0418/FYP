@@ -1,7 +1,7 @@
 'use client';
 import InputBox2 from '@/components/InputBox2'
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 const FindSymptoms = () => {
@@ -11,8 +11,21 @@ const FindSymptoms = () => {
 
   const router = useRouter();
 
+  const welcomeText = ["What is your symptom ?", "Tell us how you're feeling", "Share your health concern", "Let's get to the root of the problem", "Not feeling your best?"]
+  const [randomText, setRandomText] = useState('');
+
+  useEffect(() =>{
+    const randomIndex = Math.floor(Math.random() * welcomeText.length);
+    setRandomText(welcomeText[randomIndex]);
+  }, []);
+
+  // 4️⃣5️⃣6️⃣
+
   const handleSendMessage = async (message:string) => {
-    console.log('message', message)
+    console.log('message 3️⃣ ', message)
+    const transformedMessage = message.replace(/\s+/g, '_');
+    console.log('transformedMessage', transformedMessage.toLowerCase())
+
 
     const res = await fetch('http://127.0.0.1:5000/get_diseases_name', {
       method: 'POST',
@@ -20,7 +33,7 @@ const FindSymptoms = () => {
         'Content-Type' : 'application/json',
       },
       body:JSON.stringify({
-        symptom_user_input:message
+        symptom_user_input:transformedMessage
       })
     })
 
@@ -49,33 +62,36 @@ const FindSymptoms = () => {
 
 
   return (
-    <div className='bg-blue-100 h-screen py-16'>
+    <div className='bg-bgColor-400 h-screen py-16'>
 
-      <h4 className='font-bold text-6xl text-black mb-6 items-center text-center'>What is your symptom ?</h4>
+      <h4 className='font-bold text-5xl text-black mb-6 items-left text-left'>{randomText}</h4>
 
       <InputBox2 onSendMessage={handleSendMessage}/>
 
-      {loading ? (<>
-        <h5 className='font-bold text-2xl text-black mb-6 text-center mt-6'>
-        Based on your symptom you are most likely tto have one of these ilnnese
-      </h5>
+      {loading ? (
+        <div className='bg-bgColor-300 m-6 rounded-md p-4'>
+          <h5 className='font-bold text-2xl text-black mb-6 text-center mt-6'>
+          Based on your symptoms, you may have one of these conditions.
+          </h5>
     
-      <div className='bg-blue-500 p-8 border-black rounded-sm border-2 ml-16 mr-16 text-center'>
+          <div className='bg-bgColor-200 p-8 border-black rounded-sm border-2 ml-16 mr-16 text-center'>
 
-          {diseaes.map((item, index) => (
-            <>
-            <button key={index} className='bg-white p-4 text-xl rounded-xl mr-8 hover:bg-slate-400' onClick={() => handleNextPage(item)}>
-            {item}
-          </button>
-            </>
-          ))}
+            {diseaes.map((item, index) => (
+              <>
+              <button key={index} className='bg-white p-4 text-xl rounded-xl mr-8 hover:bg-slate-400' onClick={() => handleNextPage(item)}>
+              {item}
+            </button>
+              </>
+            ))}
 
-      </div>
+          </div>
 
-      <h5 className='font-bold text-2xl text-black mb-6 text-center mt-6'>
-        If you want to clarify more plase click on a diseaes 
-      </h5>
-      </>) : (<>
+          <h5 className='font-bold text-2xl text-black mb-6 text-center mt-6'>
+           To get a more accurate diagnosis, we recommend to click on a illness.
+          </h5>
+
+        </div>) 
+      : (<>
       </>)}
     
 

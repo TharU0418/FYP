@@ -4,9 +4,12 @@ import pandas as pd
 import pickle
 import re
 import numpy as np
+import gensim.downloader as api
 
 app = Flask(__name__)
 CORS(app)
+
+glove_vectors = api.load("glove-wiki-gigaword-100")
 
 
 def getSymptomCSV():
@@ -50,6 +53,29 @@ with open('Models/label_encoder.pkl', 'rb') as le_file:
 
 with open('Models/mlb_encoder.pkl', 'rb') as mlb_file:
     mlb = pickle.load(mlb_file)
+
+# Load the saved models for sentences
+
+with open('Models/sentence/svm_model.pkl', 'rb') as model_file:
+    svm_model = pickle.load(model_file)
+
+with open('Models/sentence/scaler.pkl', 'rb') as sca_file:
+    scale_sen = pickle.load(sca_file)
+
+with open('Models/sentence/label_encoder.pkl', 'rb') as le_file:
+    label_encoder2 = pickle.load(le_file)
+
+
+# setence model functions
+
+def get_word_embeddings(sentence):
+    words = sentence.split()
+    embeddings = [glove_vectors[word] for word in words if word in glove_vectors]
+
+    if embeddings:
+        return np.mean(embeddings, axis=0)
+    else:
+        return np.zeros(100)
 
 
 # Helper function to clean and process user input symptoms
@@ -176,6 +202,27 @@ def getPreventions():
 
     except Exception as e:
         return jsonify({"error" : str(e)}), 500    
+
+
+
+@app.route('/get_sentence', methods= ['POST'])
+def get_sentence():
+    try:
+
+        data = request.json
+        sentence = data.get('sentence')
+
+        embeddings = get_word_embeddings(sentence)
+
+        embeddings = scale_sen.transform([embeddings])
+
+        prediction = svm_model.predict(embeddings)
+        predicted_label = label_encoder2.inverse_transform(prediction)
+
+
+        return jsonify({'symptom' : predicted_label[0]})
+    except Exception as e:
+        return jsonify({"error" : str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

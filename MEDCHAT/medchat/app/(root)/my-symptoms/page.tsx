@@ -64,29 +64,31 @@ const handleResultPage = (result: string) => {
   }
 
   return (
-    <div>
-        <h1 className='text-3xl font-bold text-center mt-8 mb-5'>Details for: {disease}</h1>
+    <div className='bg-bgColor-400 h-screen py-16'>
+        <div className='bg-transparent bg-white p-6 m-4 rounded-lg'>
+          <h1 className='text-3xl font-bold text-center mt-8 mb-5'>Let's ckeck you have: {disease}</h1>
+          <h4 className='text-xl font-bold text-center mt-8 mb-6'>Click all the symptoms that you experience right now</h4>
 
-        <ToggleGroup type="multiple" className='mt-8'>
+          <ToggleGroup type="multiple" className="mt-6 grid grid-cols-6 gap-4 items-center">
             {symptoms.map((symptom) => (
-            <ToggleGroupItem key={symptom} value={symptom}>
-                <button
-                className={`bg-blue-200 p-6 text-xl border-r-2 rounded-xl ${selectedSymptoms.includes(symptom) ? 'bg-blue-400 text-white' : ''}`}
-                onClick={() => handleToggle(symptom)}
-                >
-                {symptom}
-                </button>
-            </ToggleGroupItem>
+              <ToggleGroupItem key={symptom} value={symptom} className=' mb-8'>
+                  <button
+                  className={`bg-blue-500 text-white p-6 text-xl border-r-2 rounded-xl hover:text-white' ${selectedSymptoms.includes(symptom) ? 'bg-blue-950 text-white' : ''}`}
+                  onClick={() => handleToggle(symptom)}
+                  >
+                  {symptom}
+                  </button>
+              </ToggleGroupItem>
             ))}
         </ToggleGroup>
 
         <div className="flex justify-center w-full mt-8">
-        <button
-          onClick={handleSubmit}
-          className="mt-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded"
-        >
-          SUBMIT
-        </button>
+          <button
+            onClick={handleSubmit}
+            className="text-xl mt-4 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-10 rounded">
+              SUBMIT
+          </button>
+        </div>
       </div>
     </div>
   );
