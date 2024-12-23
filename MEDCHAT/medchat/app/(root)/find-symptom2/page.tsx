@@ -6,12 +6,8 @@ import { useEffect, useState } from 'react';
 
 const FindSymptoms = () => {
 
+  const [diseaes, setDiseaes] = useState([]);
   const[loading, setLoading] = useState(false);
-
-  const[message, setMessage] = useState('');
-  const[symptom, setSymptom] = useState('');
-  const[diseases, setDiseases] = useState([]); // Added disease state
-
 
   const router = useRouter();
 
@@ -25,75 +21,69 @@ const FindSymptoms = () => {
 
   // 4️⃣5️⃣6️⃣
 
-  const getSentence = async () => {
-  //  e.preventDefault(); // Prevent form submission
-    console.log('message', message);
-  };
+  // const handleSendMessage = async (message:string) => {
+  //   console.log('message 3️⃣ ', message)
+  //   const transformedMessage = message.replace(/\s+/g, '_');
+  //   console.log('transformedMessage', transformedMessage.toLowerCase())
 
-  const getSymptom = async (e) => {
-    e.preventDefault();
 
-    getSentence();
+  //   const res = await fetch('http://127.0.0.1:5000/get_diseases_name', {
+  //     method: 'POST',
+  //     headers:{
+  //       'Content-Type' : 'application/json',
+  //     },
+  //     body:JSON.stringify({
+  //       symptom_user_input:transformedMessage
+  //     })
+  //   })
 
-    const res= await fetch('http://127.0.0.1:5000/get_sentence', {
-      method : 'POST',
-      headers : {
-        'Content-Type' : 'application/json',
-      },
-      body : JSON.stringify({
-        sentence : message
-      }),
-    });
-    const data = await res.json();
-    console.log('data  1️⃣', data)
+  //   const data = await res.json();
+  //   console.log('data', data.diseases[0])
+  //   setDiseaes(data.diseases)
 
-    setSymptom(data.symptom)
+  //   const details = data.diseases.reduce((acc: Record<string, boolean>, disease: string) => {
+  //     acc[disease] = true;
+  //     return acc;
+  //   }, {});
 
-    console.log('symptom 2️⃣', symptom)
+  //   localStorage.setItem('details', JSON.stringify(details));
+  //   console.log('diseaes', diseaes)
+  //   setLoading(true)
 
-    const transformedMessage = data.symptom.replace(/\s+/g, '_').toLowerCase();
+  // }
 
-    console.log('transformedMessage 3️⃣', transformedMessage)
-
-    const res2 = await fetch('http://127.0.0.1:5000/get_diseases_name', {
-      method: 'POST',
-      headers:{
-        'Content-Type' : 'application/json',
-      },
-      body:JSON.stringify({
-        symptom_user_input:transformedMessage
-      })
-    })
-
-    const data2 = await res2.json();
-    console.log('data 4️⃣', data2)
-   // Store diseases in the state
-   setDiseases(data2.diseases);
-
-   // Log the diseases (optional)
-   console.log('Diseases:', diseases);
-
-    const details = data2.diseases.reduce((acc: Record<string, boolean>, disease: string) => {
-         acc[disease] = true;
-         return acc;
-       }, {});
-  
-      localStorage.setItem('details', JSON.stringify(details));
-      setLoading(true)
-
-  }
-
-  useEffect(() => {
-    console.log('Updated diseases:', diseases);
-    setDiseases(diseases);
-  }, [diseases]);
-
+  // const handleNextPage = (item: string) => {
+  //   router.push(`/next-chat?disease=${encodeURIComponent(item)}`);
+  // };
 
   const handleNextPage = (item: string) => {
     router.push(`/my-symptoms?disease=${encodeURIComponent(item)}`);
   };
 
+  const [message, setMessage] = useState<string>('');
+    const [symptom, setSymptom] = useState('');
   
+    const getSentence = async () => {
+    //  e.preventDefault();  // Prevents the form from refreshing the page
+      console.log(message); // Prints the input value to the console
+  
+      const res= await fetch('http://127.0.0.1:5000/get_sentence', {
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json',
+        },
+        body : JSON.stringify({
+          sentence : message
+        }),
+      });
+      const data = await res.json();
+      console.log('data  1️⃣', data)
+  
+      setSymptom(data.symptom)
+      console.log('symptom 2️⃣', symptom)
+  
+    };
+
   return (
     <div className='bg-bgColor-400 h-screen py-16'>
 
@@ -117,7 +107,7 @@ const FindSymptoms = () => {
         <button
         type="submit"
         className="p-4 bg-blue-500 text-white rounded-r"
-        onClick={getSymptom}
+        onClick={getSentence}
       >
         Submit
         </button>
@@ -125,7 +115,7 @@ const FindSymptoms = () => {
       </form>
     </div>
 
-    {loading ? (
+      {loading ? (
         <div className='bg-bgColor-300 m-6 rounded-md p-4'>
           <h5 className='font-bold text-2xl text-black mb-6 text-center mt-6'>
           Based on your symptoms, you may have one of these conditions.
@@ -133,7 +123,7 @@ const FindSymptoms = () => {
     
           <div className='bg-bgColor-200 p-8 border-black rounded-sm border-2 ml-16 mr-16 text-center'>
 
-            {diseases.map((item, index) => (
+            {diseaes.map((item, index) => (
               <>
               <button key={index} className='bg-white p-4 text-xl rounded-xl mr-8 hover:bg-slate-400' onClick={() => handleNextPage(item)}>
               {item}
@@ -150,6 +140,7 @@ const FindSymptoms = () => {
         </div>) 
       : (<>
       </>)}
+    
 
     </div>
   )

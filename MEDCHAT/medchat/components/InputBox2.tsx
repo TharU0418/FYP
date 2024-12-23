@@ -7,37 +7,18 @@ interface InputBoxProps {
 }
 
 const InputBox2: React.FC<InputBoxProps> = ({ onSendMessage }) => {
-  const [message, setMessage] = useState<string>('');
-  const [symptom, setSymptom] = useState('');
+  const [message, setMessage] = useState('');
 
   const getSentence = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();  // Prevents the form from refreshing the page
     console.log(message); // Prints the input value to the console
 
-    const res= await fetch('http://127.0.0.1:5000/get_sentence', {
-      method : 'POST',
-      headers : {
-        'Content-Type' : 'application/json',
-      },
-      body : JSON.stringify({
-        sentence : message
-      }),
-    });
-    const data = await res.json();
-    console.log('data  1️⃣', data)
-
-    setSymptom(data.symptom)
-    console.log('symptom 2️⃣', symptom)
-
     if (message.trim()) {
-      onSendMessage(symptom);
+      onSendMessage(message);
       setMessage('');
     }
-  };
 
-  useEffect(() => {
-    console.log('send symptom 2️⃣', symptom)
-  }, [symptom])
+  }
 
                                                                                                           
 
