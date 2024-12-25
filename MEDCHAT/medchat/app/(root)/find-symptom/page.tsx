@@ -1,5 +1,6 @@
 'use client';
 import InputBox2 from '@/components/InputBox2'
+import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-vanish-input';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -24,6 +25,15 @@ const FindSymptoms = () => {
   }, []);
 
   // 4️⃣5️⃣6️⃣
+
+  const placeholders = [
+    "My sore throat is making it really uncomfortable to eat or drink anything.",
+    "Who is Tyler Durden?",
+    "I can’t seem to get warm, no matter how many blankets I use to cover myself.",
+    "I keep sneezing uncontrollably, and it feels like it’s never going to stop.",
+    "My throat feels dry and scratchy, which makes me cough uncontrollably.",
+  ];
+ 
 
   const getSentence = async () => {
   //  e.preventDefault(); // Prevent form submission
@@ -97,13 +107,13 @@ const FindSymptoms = () => {
   return (
     <div className='bg-bgColor-400 h-screen py-16'>
 
-      <h4 className='font-bold text-5xl text-black mb-6 items-left text-left'>{randomText}</h4>
+      <h4 className='font-bold text-3xl text-black mb-6 items-center text-center'>{randomText}</h4>
 
       {/* <InputBox2 onSendMessage={handleSendMessage}/> */}
 
 
-      <div className="flex">
-      <form className="flex flex-row p-6 mt-auto w-full">
+      {/* <div className="flex"> */}
+      {/* <form className="flex flex-row p-6 mt-auto w-full">
         <div className='w-10/12 border-none'>
           <input
             type="text"
@@ -112,6 +122,7 @@ const FindSymptoms = () => {
             placeholder="Type your message..."
             className="flex-1 p-4 rounded-s w-full bg-white text-black"
           />
+
         </div>
         <div className='border-none'>
         <button
@@ -122,11 +133,19 @@ const FindSymptoms = () => {
         Submit
         </button>
         </div>
-      </form>
-    </div>
+      </form> */}
+      <PlaceholdersAndVanishInput
+        placeholders={placeholders}
+       // onChange={handleChange}
+       onChange={(e) => setMessage(e.target.value)}
+        //onSubmit={onSubmit}
+        onSubmit={getSymptom}
+        
+      />
+    {/* </div> */}
 
     {loading ? (
-        <div className='bg-bgColor-300 m-6 rounded-md p-4'>
+        <div className='bg-bgColor-300 m-12 mt-20 rounded-md p-4'>
           <h5 className='font-bold text-2xl text-black mb-6 text-center mt-6'>
           Based on your symptoms, you may have one of these conditions.
           </h5>
