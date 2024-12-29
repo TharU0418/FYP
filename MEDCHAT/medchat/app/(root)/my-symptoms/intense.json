@@ -1,0 +1,44 @@
+{
+    "symptoms": [ 
+      {
+        "name": "continuous_sneezing",
+        "description": "Frequent involuntary contractions of the diaphragm and chest muscles, resulting in a forceful expulsion of air through the nose and mouth."
+      },
+      {
+        "name": "sore_throat",
+        "description": "Pain or irritation in the back of the throat."
+      },
+      {
+        "name": "hoarse_voice",
+        "description": "A rough or raspy voice, often caused by inflammation or swelling of the vocal cords."
+      },
+      {
+        "name": "feeling_tired",
+        "description": "A general sensation of fatigue or lack of energy."
+      },
+      {
+        "name": "high_temperature",
+        "description": "An elevated body temperature, also known as a fever."
+      },
+      {
+        "name": "blocked_nose",
+        "description": "Difficulty breathing through the nose due to congestion or swelling of the nasal passages."
+      },
+      {
+        "name": "runny_nose",
+        "description": "Excessive mucus production and drainage from the nose."
+      },
+      {
+        "name": "muscle_pain",
+        "description": "Aches or discomfort in the muscles."
+      },
+      {
+        "name": "loss_of_taste",
+        "description": "Inability to perceive or distinguish flavors."
+      },
+      {
+        "name": "loss_of_smell",
+        "description": "Inability to detect or identify odors."
+      }
+    ]
+  }

@@ -7,14 +7,19 @@ import React, { useEffect, useState } from 'react';
 const Results = () => {
     const searchParams = useSearchParams();
     const diseaes = searchParams.get('result');
+    const pass = searchParams.get('disease');
+    //outer.push(`/results?result=${result}?disease=${disease}`);
     const[loading,setLoading] = useState(false);
+
+    console.log('diseaes', diseaes, pass)
+
 
     const [disc, setDisc] = useState('');
     const [prevention, setPrevetion] = useState<string[]>([]);
     const [other, setOther] = useState<Record<string, boolean> | null>(null);
 
     const displayResult = async () => {
-        if (diseaes == 'NO'){
+        if (diseaes == 'No_Matching'){
             updateAllergy()
         }else{
             const res = await fetch('http://127.0.0.1:5000/getpreventions', {
@@ -24,6 +29,7 @@ const Results = () => {
                 },
                 body: JSON.stringify({
                     diseases: diseaes,
+                   //predicted_disease : diseaes
                 }),
             });
     
@@ -72,7 +78,7 @@ const Results = () => {
                   </>
                 ))}
             </div> */}
-            <ResultNo/>
+            <ResultNo pass={pass}/>
             </>
             ) : (
                 <>

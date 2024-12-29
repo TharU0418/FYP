@@ -67,3 +67,8 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Add this CSS to handle hover behavior */
+.relative:hover .absolute {
+  display: block;
+}

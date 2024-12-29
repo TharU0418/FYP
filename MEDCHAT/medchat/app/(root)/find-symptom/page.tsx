@@ -1,6 +1,7 @@
 'use client';
 import InputBox2 from '@/components/InputBox2'
 import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-vanish-input';
+import Spline from '@splinetool/react-spline';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -169,6 +170,40 @@ const FindSymptoms = () => {
         </div>) 
       : (<>
       </>)}
+
+      {!loading ? (
+        <div className="w-full hidden sm:block">
+        <Spline
+          className="spline 
+            md:spline-024 
+            sm:spline-100 
+            xs:spline-200 
+            xxs:spline-75
+            mr-10 absolute top-10 left-15"
+            scene="https://prod.spline.design/ZCJFcd6hmEDt89SB/scene.splinecode" 
+        />
+         <Spline
+          className="spline 
+            md:spline-1024 
+            sm:spline-100 
+            xs:spline-200 
+            xxs:spline-375
+            mr-10 absolute top-10 right-0"
+            scene="https://prod.spline.design/ZCJFcd6hmEDt89SB/scene.splinecode" 
+        />
+         {/* <Spline
+          className="spline 
+            md:spline-1024 
+            sm:spline-100 
+            xs:spline-200 
+            xxs:spline-375
+            mr-10 absolute top-10 right-10"
+            scene="https://prod.spline.design/ZCJFcd6hmEDt89SB/scene.splinecode" 
+        /> */}
+    </div>
+      ) : (
+        <></>
+      )}
 
     </div>
   )
