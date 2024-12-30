@@ -1,0 +1,9 @@
+Disease,Symptom_1,Symptom_2,Symptom_3,Symptom_4,Symptom_5,Symptom_6,Symptom_7,Symptom_8,Symptom_9,Symptom_10,Symptom_11,Symptom_12,Symptom_13,Symptom_14,Symptom_15,Symptom_16,Symptom_17
+Allergy, continuous_sneezing, shivering, chills, watering_from_eyes,,,,,,,,,,,,,
+Common Cold, continuous_sneezing,sore_throat,hoarse_voice,feeling_tired,high_temperature,blocked_nose,runny_nose,muscle_pain,loss_of_taste ,loss_of_smell,,,,,,,
+Diabetes ,lethargy,excessive_hunger,increased_appetite,often_thirsty,often_urinate,blurred_and_distorted_vision,weight_loss,obesity,,,,,,,,,
+Gastroenteritis,vomiting,dehydration,diarrhea,sunken_eyes,chest_pain,upset_stomach,headache,,,,,,,,,,
+Bronchial Asthma,fatigue,wheezing,breathlessness,tight_chest,persistent_cough,high_fever,family_history,,,,,,,,,,
+Hypertension,chest_pain,dizziness,difficulty_breathing,abnormal_heart_rhythm,blurred_vision,loss_of_balance,anxiety,headache,vomiting,nausea,tinnitus,nosebleeds,,,,,
+Chicken pox,high_fever,loss_of_appetite,malaise,red_spots_over_body,spots_over_body_fill_with_fluid ,itchy_blisters,spots_over_body_leak_fluid,swelled_lymph_nodes,headache,lethargy,,,,,,,
+Tuberculosis,prolonged_cough,chest_pain,fatigue,yellowing_of_eyes,breathlessness,sweating,loss_of_appetite,phlegm,night_sweats,chills,vomiting,swelled_lymph_nodes,malaise,high_fever,weight_loss,blood_in_sputum,
