@@ -6,17 +6,17 @@ Chronic cholestasis
 Diabetes
 Gastroenteritis
 Bronchial Asthma
-
-
 Hypertension
-Malaria
-Dengue
 Chicken pox
+
+
+
 Hepatitis A
 Hepatitis B
 Hepatitis C
 Hepatitis D
 Hepatitis E
+
 Tuberculosis
 Pneumonia
 Heart attack
@@ -25,7 +25,8 @@ Arthritis
 Urinary tract infection
 Psoriasis
 Fungal infection
-
+Malaria
+Dengue
 
 
 
