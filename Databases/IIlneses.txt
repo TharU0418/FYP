@@ -1,13 +1,68 @@
-Allergy
+Communicable diseases
+
+
+Malaria
+Dengue
+Fungal infection
+
+
+------------------------
+
 Common Cold
+Chicken pox
+Tuberculosis
+Pneumonia
+Gastroenteritis
+Urinary tract infection
+
+
+
+*******************************
+
+
+
+Non communicable diseases
+
+
+
 GERD
 Chronic cholestasis
+Heart attack
+Migraine Headaches
+Irritable Bowel Syndrome (IBS): 
 
+stroke
+coronary artery disease
+inflammatory bowel disease (IBD)
+psoriasis
+seizure disorder
+sleep disorders
+systematic lupus erythematosus
+eczema
+
+
+------------------------
+
+Allergy
 Diabetes
-Gastroenteritis
 Bronchial Asthma
 Hypertension
-Chicken pox
+Hypothyroidism
+Arthritis
+Psoriasis
+Chronic Kidney Disease
+Autoimmune Diseases
+
+
+
+
+
+
+
+
+
+
+***************
 
 
 
@@ -16,19 +71,3 @@ Hepatitis B
 Hepatitis C
 Hepatitis D
 Hepatitis E
-
-Tuberculosis
-Pneumonia
-Heart attack
-Hypothyroidism
-Arthritis
-Urinary tract infection
-Psoriasis
-Fungal infection
-Malaria
-Dengue
-
-
-
-what are the severity of these symptom to get GRED
-
