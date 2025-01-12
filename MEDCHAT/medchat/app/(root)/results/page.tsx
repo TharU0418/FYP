@@ -20,7 +20,8 @@ const Results = () => {
 
     const displayResult = async () => {
         if (diseaes == 'No_Matching'){
-            updateAllergy()
+            const res = 'No_Matching'
+            updateAllergy(res)
         }else{
             const res = await fetch('http://127.0.0.1:5000/getpreventions', {
                 method: 'POST',
@@ -37,7 +38,7 @@ const Results = () => {
             console.log('data.description', data.description)
             setDisc(data.desc);
             setPrevetion(data.prevntion_list);
-            updateAllergy();
+            updateAllergy(pass);
             console.log('prevention', data.prevntion_list);
             setLoading(true)
         }
@@ -51,12 +52,20 @@ const Results = () => {
         displayResult();
     }, []);
 
-    const updateAllergy = () => {
+    const updateAllergy = (resl) => {
         // Retrieve the current details from localStorage
         const savedDetails = JSON.parse(localStorage.getItem('details')) || {};
 
-        // Update the 'Allergy' value to false without losing other values
-        savedDetails['Allergy'] = false;
+        if (resl = "No_Matching"){
+
+        }else{
+            // Update the 'Allergy' value to false without losing other values
+            savedDetails[resl] = false;
+        }
+
+        
+
+        console.log('savedDetails', savedDetails, resl)
 
         // Save the updated details back to localStorage
         localStorage.setItem('details', JSON.stringify(savedDetails));

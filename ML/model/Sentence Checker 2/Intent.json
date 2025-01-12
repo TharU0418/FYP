@@ -637,7 +637,7 @@
             "responses": "cramping"
         },
         {
-            "intent": "fever",
+            "intent": "fever", 
             "text": [
                 "I’ve been running a high fever all day.",
                 "My body feels so hot, I think I have a fever.",

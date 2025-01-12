@@ -4,15 +4,13 @@ import pandas as pd
 import pickle
 import re
 import numpy as np
-#import gensim.downloader as api
+import gensim.downloader as api
 from sklearn.preprocessing import LabelEncoder
-from transformers import BertTokenizer, TFBertForSequenceClassification
-import tensorflow as tf
 
 app = Flask(__name__)
 CORS(app)
 
-#glove_vectors = api.load("glove-wiki-gigaword-100")
+glove_vectors = api.load("glove-wiki-gigaword-100")
 
 
 def getSymptomCSV():
@@ -68,31 +66,27 @@ with open("Models/mlb.pkl", "rb") as mlb_file:
 
 
 # Load the saved models for sentences
-# Load the trained model, tokenizer, and label mapping
-model = TFBertForSequenceClassification.from_pretrained('./sen_models')
-tokenizer = BertTokenizer.from_pretrained('./sen_models')
 
-with open('sen_models/label_mapping.pkl', 'rb') as f:
-    label_mapping = pickle.load(f)
+with open('Models/sentence/svm_model.pkl', 'rb') as model_file:
+    svm_model = pickle.load(model_file)
+
+with open('Models/sentence/scaler.pkl', 'rb') as sca_file:
+    scale_sen = pickle.load(sca_file)
+
+with open('Models/sentence/label_encoder.pkl', 'rb') as le_file:
+    label_encoder2 = pickle.load(le_file)
 
 
 # setence model functions
-# Function to predict illness
-def predict_illness(text):
-    # Tokenize the input text
-    encoding = tokenizer(text, truncation=True, padding=True, max_length=128, return_tensors="tf")
-    
-    # Get model output
-    outputs = model(encoding)
-    logits = outputs.logits
-    
-    # Get the predicted class index
-    predicted_class = tf.argmax(logits, axis=1).numpy()[0]
-    
-    # Map the predicted class index to the illness (intent)
-    predicted_illness = label_mapping[predicted_class]
-    
-    return predicted_illness
+
+def get_word_embeddings(sentence):
+    words = sentence.split()
+    embeddings = [glove_vectors[word] for word in words if word in glove_vectors]
+
+    if embeddings:
+        return np.mean(embeddings, axis=0)
+    else:
+        return np.zeros(100)
 
 
 # Helper function to clean and process user input symptoms
@@ -283,13 +277,15 @@ def get_sentence():
         data = request.json
         sentence = data.get('sentence')
 
-        # Predict the illness
-        predicted_illness = predict_illness(sentence)
-        
-        # Return the result as a JSON response
-        return jsonify({"symptom": predicted_illness})
+        embeddings = get_word_embeddings(sentence)
 
-        
+        embeddings = scale_sen.transform([embeddings])
+
+        prediction = svm_model.predict(embeddings)
+        predicted_label = label_encoder2.inverse_transform(prediction)
+
+
+        return jsonify({'symptom' : predicted_label[0]})
     except Exception as e:
         return jsonify({"error" : str(e)}), 500
 

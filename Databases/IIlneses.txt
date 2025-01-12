@@ -28,15 +28,13 @@ Non communicable diseases
 GERD
 Chronic cholestasis
 Heart attack
-Migraine Headaches
 Irritable Bowel Syndrome (IBS): 
 
-stroke
-coronary artery disease
-inflammatory bowel disease (IBD)
+
+
 psoriasis
 seizure disorder
-sleep disorders
+sleep disorders - https://www.healthline.com/health/sleep/disorders#types
 systematic lupus erythematosus
 eczema
 
@@ -52,8 +50,10 @@ Arthritis
 Psoriasis
 Chronic Kidney Disease
 Autoimmune Diseases
-
-
+stroke
+coronary artery disease
+Inflammatory Bowel Disease (IBD)
+Migraine Headaches
 
 
 
