@@ -4,11 +4,71 @@ import pandas as pd
 import pickle
 import re
 import numpy as np
+#import gensim.downloader as api
+from sklearn.preprocessing import LabelEncoder
 from transformers import BertTokenizer, TFBertForSequenceClassification
 import tensorflow as tf
 
 app = Flask(__name__)
 CORS(app)
+
+#glove_vectors = api.load("glove-wiki-gigaword-100")
+
+
+def getSymptomCSV():
+    global df_symptoms
+    df_symptoms = pd.read_csv('DB/Symptoms.csv')
+
+def getIllnessCSV():
+    global df_illness
+    df_illness = pd.read_csv('DB/Illness.csv')
+
+def getIllnessDesription():
+    global df_diseases_list
+    df_diseases_list = pd.read_csv('DB/symptom_Description.csv')
+
+def getPreventionDetails():
+    global df_preventions
+    df_preventions = pd.read_csv('DB/symptom_precaution.csv')
+
+def getTreatmentDetails():
+    global df_treatments
+    df_treatments = pd.read_csv('DB/symptom_treatments.csv')
+
+
+# Define the CustomLabelEncoder class (same as in your training script)
+# class CustomLabelEncoder:
+#     def __init__(self, start=0):
+#         self.start = start
+#         self.classes_ = []
+    
+#     def fit_transform(self, y):
+#         self.classes_ = sorted(set(y))  # Get unique classes
+#         class_map = {class_: i for i, class_ in enumerate(self.classes_)}
+#         return np.array([class_map[class_] + self.start for class_ in y])
+class CustomLabelEncoder(LabelEncoder):
+    def __init__(self, start=0):
+        self.start = start
+        super().__init__()
+
+    def fit_transform(self, y):
+        encoded = super().fit_transform(y)
+        encoded += self.start
+        return encoded
+    
+    #def inverse_transform(self, y):
+     #   return [self.classes_[i - self.start] for i in y]  # Inverse transformation
+   
+
+# Load the saved models and encoders
+with open("Models/rf_model.pkl", "rb") as model_file:
+    rf_model = pickle.load(model_file)
+
+with open("Models/label_encoder.pkl", "rb") as le_file:
+    encoder = pickle.load(le_file)
+
+with open("Models/mlb.pkl", "rb") as mlb_file:
+    mlb = pickle.load(mlb_file)
 
 
 # Load the saved models for sentences
@@ -25,36 +85,6 @@ with open('sen_models/label_mapping.pkl', 'rb') as f:
     label_mapping = pickle.load(f)
 
 
-# Load the saved models and encoders
-# with open("Models/rf_model.pkl", "rb") as model_file:
-#     rf_model = pickle.load(model_file)
-
-# with open("Models/label_encoder.pkl", "rb") as le_file:
-#     encoder = pickle.load(le_file)
-
-# with open("Models/mlb.pkl", "rb") as mlb_file:
-#     mlb = pickle.load(mlb_file)
-    
-def getSymptomCSV():
-    global df_symptoms
-    df_symptoms = pd.read_csv('DB/Symptoms.csv')
-
-def getIllnessCSV():
-    global df_illness
-    df_illness = pd.read_csv('DB/Illness.csv')
-def getIllnessDesription():
-    global df_diseases_list
-    df_diseases_list = pd.read_csv('DB/symptom_Description.csv')
-
-def getPreventionDetails():
-    global df_preventions
-    df_preventions = pd.read_csv('DB/symptom_precaution.csv')
-
-def getTreatmentDetails():
-    global df_treatments
-    df_treatments = pd.read_csv('DB/symptom_treatments.csv')
-
-    
 # setence model functions
 # Function to predict illness
 def predict_illness(text):
@@ -73,41 +103,21 @@ def predict_illness(text):
     
     return predicted_illness
 
+
+# Helper function to clean and process user input symptoms
+# # def strip_to_basic_token(symptoms):
+# #     if isinstance(symptoms, str):
+# #         symptoms = [symptoms]
+    
+# #     symptoms = [symptom.strip().lower().replace(' ', '_').replace('_', ' ') for symptom in symptoms]
+# #     return [re.sub(r'\s+', ' ', symptom) for symptom in symptoms]
+
 def strip_to_basic_tokens(text):
     # Remove double spaces and underscores, then split by commas and lowercase the tokens
     text = re.sub(r'[_\s]+', ' ', text)
     tokens = [token.strip().lower() for token in text.split(',')]
     return tokens
 
-
-
-####################################
-
-@app.route('/get_sentence', methods= ['POST'])
-def get_sentence():
-    try:
-
-        data = request.json
-        sentence = data.get('sentence')
-
-           # Check if the input is a string
-        if not isinstance(sentence, str):
-            return jsonify({"error": "Invalid sentence"}), 400
-        
-        # Check if the input string is empty
-        if sentence.strip() == "":
-            return jsonify({"error": "Please enter your sentence"}), 400
-
-        # Predict the illness
-        predicted_illness = predict_illness(sentence)
-        
-        # Return the result as a JSON response
-        return jsonify({"symptom": predicted_illness})
-
-        
-    except Exception as e:
-        return jsonify({"error" : str(e)}), 500
-    
 
 # Get diseases names based on symptoms
 @app.route('/get_diseases_name', methods= ['POST'])
@@ -202,7 +212,7 @@ def predictthediseases():
 
     except Exception as e:
         return jsonify({"error" : str(e)}), 500
- 
+    
 
 # Get illness preventions and treatments
 @app.route('/getpreventions', methods=['POST'])
@@ -251,6 +261,31 @@ def getPreventions():
         return jsonify({"error" : str(e)}), 500    
 
 
+
+@app.route('/get_sentence', methods= ['POST'])
+def get_sentence():
+    try:
+
+        data = request.json
+        sentence = data.get('sentence')
+
+           # Check if the input is a string
+        if not isinstance(sentence, str):
+            return jsonify({"error": "Invalid sentence"}), 400
+        
+        # Check if the input string is empty
+        if sentence.strip() == "":
+            return jsonify({"error": "Please enter your sentence"}), 400
+
+        # Predict the illness
+        predicted_illness = predict_illness(sentence)
+        
+        # Return the result as a JSON response
+        return jsonify({"symptom": predicted_illness})
+
+        
+    except Exception as e:
+        return jsonify({"error" : str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
