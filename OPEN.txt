@@ -1,3 +1,15 @@
+DATASET - 
+
+Diseases - Main DB - all possible symptoms and diseases
+Illness.txt - 
+Illness - diseases and all their symptoms
+intense.json - sentences DB
+Map.word
+symptom_Description - disease descriptions
+symptom_precaution - disease treatments
+Symptoms - symptoms and their possible illnesses
+
+
 MEDCHAT - Inside this folder the next.JS web app   
 
 ML  - Include all the models that train 

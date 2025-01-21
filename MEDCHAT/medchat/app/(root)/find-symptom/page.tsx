@@ -1,5 +1,4 @@
 'use client';
-import InputBox2 from '@/components/InputBox2'
 import { PlaceholdersAndVanishInput } from '@/components/ui/placeholders-and-vanish-input';
 import Spline from '@splinetool/react-spline';
 import { useRouter } from 'next/navigation';
@@ -41,7 +40,7 @@ const FindSymptoms = () => {
     console.log('message', message);
   };
 
-  const getSymptom = async (e) => {
+  const getSymptom = async (e : React.FormEvent) => {
     e.preventDefault();
 
     getSentence();

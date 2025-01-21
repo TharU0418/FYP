@@ -5,6 +5,18 @@
         "description": "Frequent involuntary contractions of the diaphragm and chest muscles, resulting in a forceful expulsion of air through the nose and mouth."
       },
       {
+        "name": "shivering",
+        "description": "Shivering is the rapid, involuntary muscle movement that generates heat in response to cold temperatures or emotional stress."
+      },
+      {
+        "name": "chills",
+        "description": "Chills are your body’s way of raising its core temperature. "
+      },
+      {
+        "name": " watering_from_eyes",
+        "description": "Also known as excessive tearing or lacrimation, is the condition where the eyes produce an abnormal amount of tears"
+      },
+      {
         "name": "sore_throat",
         "description": "Pain or irritation in the back of the throat."
       },
@@ -39,6 +51,38 @@
       {
         "name": "loss_of_smell",
         "description": "Inability to detect or identify odors."
+      },
+      {
+        "name": "lethargy",
+        "description": "Lethargy is a state of sluggishness, fatigue, or lack of energy, often accompanied by a desire to sleep or rest, and can be a symptom of various health conditions."
+      },
+      {
+        "name": "excessive_hunger",
+        "description": "Excessive hunger, also known as polyphagia, is an abnormal increase in appetite."
+      },
+      {
+        "name": "increased_appetite",
+        "description": "REMOVE IT"
+      },
+      {
+        "name": "often_thirsty",
+        "description": "Experiencing excessive thirst"
+      },
+      {
+        "name": "often_urinate",
+        "description": "Condition of urinating more often than usual"
+      },
+      {
+        "name": "blurred_and_distorted_vision",
+        "description": "Condition where a person experiences unclear or distorted sight."
+      },
+      {
+        "name": "weight_loss",
+        "description": "Reduction of body mass."
+      },
+      {
+        "name": "obesity",
+        "description": "Medical condition characterized by excessive body fat."
       }
     ]
   }
