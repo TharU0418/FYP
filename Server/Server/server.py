@@ -5,10 +5,12 @@ import pickle
 import re
 import pandas as pd
 import numpy as np
-
+import random
     
 app = Flask(__name__)
 CORS(app)
+
+data = pd.read_json('DB/intense.json')
 
 def getSymptomCSV():
     global df_symptoms
@@ -63,10 +65,20 @@ def strip_to_basic_tokens(text):
 
 
 def predict_symptom(text):
+    # Vectorize the input text
     text_vec = vectorizer.transform([text])
-    intent_pred = model.predict(text_vec)[0]
-    predict_int = intent_labels[intent_pred]
-    return predict_int
+    
+    # Make the prediction (predicting the index of the intent)
+    intent_pred_index = model.predict(text_vec)[0]
+    
+    # Map the predicted index back to the actual intent and get a random response
+    predicted_responses = data['intents'][intent_pred_index]['responses']
+    if isinstance(predicted_responses, list):
+        predicted_response = random.choice(predicted_responses)
+    else:
+        predicted_response = predicted_responses  # In case it's a string
+    
+    return predicted_response
 
 # def predict_symptom(text):
 #     text_vec = vectorizer.transform([text])  # Transform input sentence into a vector

@@ -4,208 +4,174 @@ import Spline from '@splinetool/react-spline';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-
 const FindSymptoms = () => {
-
-  const[loading, setLoading] = useState(false);
-
-  const[message, setMessage] = useState('');
-  const[symptom, setSymptom] = useState('');
-  const[diseases, setDiseases] = useState([]); // Added disease state
-
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [symptom, setSymptom] = useState('');
+  const [diseases, setDiseases] = useState([]); // Added disease state
+  const [error, setError] = useState('');
 
   const router = useRouter();
 
-  const welcomeText = ["What is your symptom ?", "Tell us how you're feeling", "Share your health concern", "Let's get to the root of the problem", "Not feeling your best?"]
+  const welcomeText = [
+    'What is your symptom?',
+    "Tell us how you're feeling",
+    'Share your health concern',
+    "Let's get to the root of the problem",
+    'Not feeling your best?',
+  ];
   const [randomText, setRandomText] = useState('');
 
-  useEffect(() =>{
+  useEffect(() => {
     const randomIndex = Math.floor(Math.random() * welcomeText.length);
     setRandomText(welcomeText[randomIndex]);
   }, []);
 
-  // 4️⃣5️⃣6️⃣
-
   const placeholders = [
-    "My sore throat is making it really uncomfortable to eat or drink anything.",
-    "Who is Tyler Durden?",
+    'My sore throat is making it really uncomfortable to eat or drink anything.',
+    'Who is Tyler Durden?',
     "I can’t seem to get warm, no matter how many blankets I use to cover myself.",
     "I keep sneezing uncontrollably, and it feels like it’s never going to stop.",
-    "My throat feels dry and scratchy, which makes me cough uncontrollably.",
+    'My throat feels dry and scratchy, which makes me cough uncontrollably.',
   ];
- 
 
   const getSentence = async () => {
-  //  e.preventDefault(); // Prevent form submission
     console.log('message', message);
   };
 
-  const getSymptom = async (e : React.FormEvent) => {
+  const getSymptom = async (e: React.FormEvent) => {
     e.preventDefault();
 
     getSentence();
 
-    const res= await fetch('http://127.0.0.1:5000/get_sentence', {
-      method : 'POST',
-      headers : {
-        'Content-Type' : 'application/json',
+    const res = await fetch('http://127.0.0.1:5000/get_sentence', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      body : JSON.stringify({
-        sentence : message
+      body: JSON.stringify({
+        sentence: message,
       }),
     });
     const data = await res.json();
-    console.log('data  1️⃣', data)
+    console.log('data  1️⃣', data);
 
-    setSymptom(data.symptom)
-
-    console.log('symptom 2️⃣', symptom)
+    setSymptom(data.symptom);
 
     const transformedMessage = data.symptom.replace(/\s+/g, '_').toLowerCase();
 
-    console.log('transformedMessage 3️⃣', transformedMessage)
-
     const res2 = await fetch('http://127.0.0.1:5000/get_diseases_name', {
       method: 'POST',
-      headers:{
-        'Content-Type' : 'application/json',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      body:JSON.stringify({
-        symptom_user_input:transformedMessage
-      })
-    })
+      body: JSON.stringify({
+        symptom_user_input: transformedMessage,
+      }),
+    });
 
     const data2 = await res2.json();
-    console.log('data 4️⃣', data2)
-   // Store diseases in the state
-   setDiseases(data2.diseases);
+    console.log('data 4️⃣', data2);
 
-   // Log the diseases (optional)
-   console.log('Diseases:', diseases);
-
-    const details = data2.diseases.reduce((acc: Record<string, boolean>, disease: string) => {
-         acc[disease] = true;
-         return acc;
-       }, {});
-  
+    if (data2.message === 'Enter correct symptom') {
+      setError(`Currently MEDCHAT dont support for your symptom ${transformedMessage}`);
+    } else {
+      setDiseases(data2.diseases);
+      const details = data2.diseases.reduce(
+        (acc: Record<string, boolean>, disease: string) => {
+          acc[disease] = true;
+          return acc;
+        },
+        {}
+      );
       localStorage.setItem('details', JSON.stringify(details));
-      setLoading(true)
-
-  }
-
-  useEffect(() => {
-    console.log('Updated diseases:', diseases);
-    setDiseases(diseases);
-  }, [diseases]);
-
+      setLoading(true);
+    }
+  };
 
   const handleNextPage = (item: string) => {
     router.push(`/my-symptoms?disease=${encodeURIComponent(item)}`);
   };
 
-  
+  // Error modal component
+  const ErrorModal = ({ message, onClose }: { message: string; onClose: () => void }) => {
+    return (
+      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+        <div className="bg-white p-8 rounded-md w-96 relative">
+          {/* <h4 className="font-bold text-xl text-red-500">Error</h4> */}
+          <p className="text-red-500">{message}</p>
+          
+          {/* Close icon in the top-right corner */}
+          <span
+            onClick={onClose}
+            className="absolute top-2 right-2 cursor-pointer text-2xl text-gray-600 hover:text-gray-800"
+          >
+            &times; {/* This is the "X" icon for close */}
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className='bg-bgColor-400 h-screen py-16'>
+    <div className="bg-bgColor-400 h-screen py-16">
+      <h4 className="font-bold text-3xl text-black mb-6 items-center text-center">{randomText}</h4>
 
-      <h4 className='font-bold text-3xl text-black mb-6 items-center text-center'>{randomText}</h4>
-
-      {/* <InputBox2 onSendMessage={handleSendMessage}/> */}
-
-
-      {/* <div className="flex"> */}
-      {/* <form className="flex flex-row p-6 mt-auto w-full">
-        <div className='w-10/12 border-none'>
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-1 p-4 rounded-s w-full bg-white text-black"
-          />
-
-        </div>
-        <div className='border-none'>
-        <button
-        type="submit"
-        className="p-4 bg-blue-500 text-white rounded-r"
-        onClick={getSymptom}
-      >
-        Submit
-        </button>
-        </div>
-      </form> */}
       <PlaceholdersAndVanishInput
         placeholders={placeholders}
-       // onChange={handleChange}
-       onChange={(e) => setMessage(e.target.value)}
-        //onSubmit={onSubmit}
+        onChange={(e) => setMessage(e.target.value)}
         onSubmit={getSymptom}
-        
       />
-    {/* </div> */}
 
-    {loading ? (
-        <div className='bg-bgColor-300 m-12 mt-20 rounded-md p-4'>
-          <h5 className='font-bold text-2xl text-black mb-6 text-center mt-6'>
-          Based on your symptoms, you may have one of these conditions.
+      {loading && (
+        <div className="bg-bgColor-300 m-12 mt-20 rounded-md p-4">
+          <h5 className="font-bold text-2xl text-black mb-6 text-center mt-6">
+            Based on your symptoms, you may have one of these conditions.
           </h5>
-    
-          <div className='bg-bgColor-200 p-8 border-black rounded-sm border-2 ml-16 mr-16 text-center'>
-
+          <div className="bg-bgColor-200 p-8 border-black rounded-sm border-2 ml-16 mr-16 text-center">
             {diseases.map((item, index) => (
-              <>
-              <button key={index} className='bg-white p-4 text-xl rounded-xl mr-8 hover:bg-slate-400' onClick={() => handleNextPage(item)}>
-              {item}
-            </button>
-              </>
+              <button
+                key={index}
+                className="bg-white p-4 text-xl rounded-xl mr-8 hover:bg-slate-400"
+                onClick={() => handleNextPage(item)}
+              >
+                {item}
+              </button>
             ))}
-
           </div>
-
-          <h5 className='font-bold text-2xl text-black mb-6 text-center mt-6'>
-           To get a more accurate diagnosis, we recommend to click on a illness.
+          <h5 className="font-bold text-2xl text-black mb-6 text-center mt-6">
+            To get a more accurate diagnosis, we recommend clicking on an illness.
           </h5>
+        </div>
+      )}
 
-        </div>) 
-      : (<>
-      </>)}
-
-      {!loading ? (
+      {!loading && (
         <div className="w-full hidden sm:block">
-        <Spline
-          className="spline 
+          <Spline
+            className="spline 
             md:spline-024 
             sm:spline-100 
             xs:spline-200 
             xxs:spline-75
             mr-10 absolute top-10 left-15"
-            scene="https://prod.spline.design/ZCJFcd6hmEDt89SB/scene.splinecode" 
-        />
-         <Spline
-          className="spline 
+            scene="https://prod.spline.design/ZCJFcd6hmEDt89SB/scene.splinecode"
+          />
+          <Spline
+            className="spline 
             md:spline-1024 
             sm:spline-100 
             xs:spline-200 
             xxs:spline-375
             mr-10 absolute top-10 right-0"
-            scene="https://prod.spline.design/ZCJFcd6hmEDt89SB/scene.splinecode" 
-        />
-         {/* <Spline
-          className="spline 
-            md:spline-1024 
-            sm:spline-100 
-            xs:spline-200 
-            xxs:spline-375
-            mr-10 absolute top-10 right-10"
-            scene="https://prod.spline.design/ZCJFcd6hmEDt89SB/scene.splinecode" 
-        /> */}
-    </div>
-      ) : (
-        <></>
+            scene="https://prod.spline.design/ZCJFcd6hmEDt89SB/scene.splinecode"
+          />
+        </div>
       )}
 
+      {/* Show the error modal if error state is set */}
+      {error && <ErrorModal message={error} onClose={() => setError('')} />}
     </div>
-  )
-}
+  );
+};
 
-export default FindSymptoms
+export default FindSymptoms;
