@@ -6,11 +6,15 @@ import re
 import pandas as pd
 import numpy as np
 import random
-    
+from transformers import BertTokenizer, TFBertForSequenceClassification
+import tensorflow as tf
+
 app = Flask(__name__)
 CORS(app)
 
+
 data = pd.read_json('DB/intense.json')
+
 
 def getSymptomCSV():
     global df_symptoms
@@ -39,7 +43,6 @@ with open('Models/sentence_models/vectorizer.pkl', 'rb') as f:
 with open('Models/sentence_models/intent_labels.pkl', 'rb') as f:
     intent_labels = joblib.load(f)
 
-
 # Load the saved models and encoders **after** defining the class
 with open("Models/random_forest_model.pkl", "rb") as model_file:
     rf_model = pickle.load(model_file)
@@ -57,12 +60,71 @@ with open("Models/offset.pkl", "rb") as offset:
     offset = pickle.load(offset)
 
 
+model = TFBertForSequenceClassification.from_pretrained('Models/sen_models')
+tokenizer = BertTokenizer.from_pretrained('Models/sen_models')
+
+with open('Models/sen_models/label_mapping.pkl', 'rb') as f:
+    label_mapping = pickle.load(f)
+ 
+
 def strip_to_basic_tokens(text):
     # Remove double spaces and underscores, then split by commas and lowercase the tokens
     text = re.sub(r'[_\s]+', ' ', text)
     tokens = [token.strip().lower() for token in text.split(',')]
     return tokens
 
+
+#-------------  BERT MODEL  -----------------------------------
+
+
+
+# setence model functions
+# Function to predict illness
+def predict_illness(text):
+    # Tokenize the input text
+    encoding = tokenizer(text, truncation=True, padding=True, max_length=128, return_tensors="tf")
+    
+    # Get model output
+    outputs = model(encoding)
+    logits = outputs.logits
+    
+    # Get the predicted class index
+    predicted_class = tf.argmax(logits, axis=1).numpy()[0]
+    
+    # Map the predicted class index to the illness (intent)
+    predicted_illness = label_mapping[predicted_class]
+    
+    return predicted_illness
+
+@app.route('/get_sentence1', methods= ['POST'])
+def get_sentence1():
+    try:
+
+        data = request.json
+        sentence = data.get('sentence')
+
+           # Check if the input is a string
+        if not isinstance(sentence, str):
+            return jsonify({"error": "Invalid sentence"}), 400
+        
+        # Check if the input string is empty
+        if sentence.strip() == "":
+            return jsonify({"error": "Please enter your sentence"}), 400
+
+        # Predict the illness
+        predicted_illness = predict_illness(sentence)
+        
+        # Return the result as a JSON response
+        return jsonify({"symptom": predicted_illness})
+
+        
+    except Exception as e:
+        return jsonify({"error" : str(e)}), 500
+
+
+
+
+#----------------------------------------------------
 
 def predict_symptom(text):
     # Vectorize the input text
@@ -79,22 +141,6 @@ def predict_symptom(text):
         predicted_response = predicted_responses  # In case it's a string
     
     return predicted_response
-
-# def predict_symptom(text):
-#     text_vec = vectorizer.transform([text])  # Transform input sentence into a vector
-#     intent_pred = model.predict(text_vec)[0]  # Get predicted value (likely a string)
-
-#     # Check if the prediction is a string (as model may return a string label)
-#     if isinstance(intent_pred, str):
-#         # Convert the predicted string to its corresponding label using intent_labels
-#         if intent_pred in intent_labels:
-#             predict_int = intent_pred  # If it's already in intent_labels, return it directly
-#             return predict_int
-#         else:
-#             raise ValueError(f"Prediction '{intent_pred}' not found in intent_labels.")
-#     else:
-#         raise ValueError(f"Unexpected prediction type: {type(intent_pred)}")
-
 
 def predict_illness(symptoms):
 
@@ -140,7 +186,6 @@ def predict_illness(symptoms):
     return predicted_disease_name
 
 
-
 @app.route('/get_sentence', methods = ['POST'])
 def get_sentence():
     try:
@@ -162,7 +207,6 @@ def get_sentence():
 
     except Exception as e:
         return jsonify({"error" : str(e)}), 500 
-    
 
 ########################################
 
@@ -282,15 +326,11 @@ def getPreventions():
                 if pd.notna(prevention):
                     prevention_list.append(prevention)
 
-
         if not treatment_row.empty:
             for i in range(1, len(treatment_row.columns)):
                 treatment = treatment_row.iloc[0, i]
                 if pd.notna(treatment):
                     treatment_list.append(treatment)
-
-        
-
 
         return jsonify({"description" : discription, "prevntion_list" : prevention_list, "treatment_list" : treatment_list})
 

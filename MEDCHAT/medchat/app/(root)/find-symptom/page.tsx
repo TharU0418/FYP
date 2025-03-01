@@ -54,7 +54,7 @@ const FindSymptoms = () => {
       }),
     });
     const data = await res.json();
-    console.log('data  1️⃣', data);
+    console.log('predicted symptom: ', data);
 
     setSymptom(data.symptom);
 
@@ -71,7 +71,7 @@ const FindSymptoms = () => {
     });
 
     const data2 = await res2.json();
-    console.log('data 4️⃣', data2);
+    console.log('Relevant Illnesses: ', data2);
 
     if (data2.message === 'Enter correct symptom') {
       setError(`Currently MEDCHAT dont support for your symptom ${transformedMessage}`);

@@ -51,13 +51,18 @@ def load_and_predict(symptoms, model_dir="Models"):
     
     # Apply the tokenization process to the sample symptoms
     basic_tokens = strip_to_basic_tokens(symptoms)
+    print('basic_tokens', basic_tokens)
 
     # Step 2: One-hot encode the tokens using the MultiLabelBinarizer (mlb) used during training
     one_hot_encoded_sample = mlb.transform([basic_tokens])
-    
+    print('one_hot_encoded_sample', one_hot_encoded_sample)
+
+
     # Create a DataFrame from the one-hot encoded sample
     one_hot_df = pd.DataFrame(one_hot_encoded_sample, columns=mlb.classes_)
-    
+    print('one_hot_df', one_hot_df)
+
+
     # Ensure that all columns (features) from training data are present (fill with 0 for missing columns)
     missing_columns = set(df_encoded.columns) - set(one_hot_df.columns)
     for col in missing_columns:
@@ -65,10 +70,12 @@ def load_and_predict(symptoms, model_dir="Models"):
     
     # Reorder columns to match the original training DataFrame's order
     one_hot_df = one_hot_df[df_encoded.columns.difference(['Disease'])]
+    print('one_hot_df', one_hot_df)
 
 
     # Step 3: Make prediction
     y_pred = rf_model.predict(one_hot_df)
+    print('y_pred', y_pred)
 
     # Check if all values in `y_pred` are `False`
     if not y_pred.any():
@@ -76,15 +83,23 @@ def load_and_predict(symptoms, model_dir="Models"):
     
     # Step 4: Decode the prediction (back to the disease label)
     predicted_class_index = np.argmax(y_pred)
+    print('predicted_class_index', predicted_class_index)
+
     
     # Get the original encoded value
     predicted_encoded_value = encoder.transform(encoder.classes_)[predicted_class_index]
-    
+    print('predicted_encoded_value', predicted_encoded_value)
+
+
     # Apply the offset to get the final encoded value
     predicted_encoded_value_with_offset = predicted_encoded_value + offset
+    print('predicted_encoded_value_with_offset', predicted_encoded_value_with_offset)
+
 
     # Create the mapping for later
     label_mapping = {v + offset: k for k, v in zip(encoder.classes_, range(len(encoder.classes_)))}
+    print('label_mapping', label_mapping)
+
     
     # Get the original class name based on the offset value
     predicted_disease_name = label_mapping[predicted_encoded_value_with_offset]

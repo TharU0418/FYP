@@ -1,0 +1,12 @@
+runny_nose,cough,sneezing,sore_throat,headache,fever,mild_body_aches,muscle_pain_or_joint_pain,wheezing,breathlessness,chest_tightness,chest_pain,Dizziness,Difficulrt_breathing,nausea,vomiting,anxiety,buzzing_in_ears,nosebleeds,abnormal_heart_rhythms,pain_or_discomfort_in_the_center_of_the_chest,pain_or_discomfort_in_the_arms,nausea,a_cold_sweat,pain_or_aching,stiffness,decreased_flexibility,swelling,abdominal_pain_or_cramps,Excess_gas,diarrhea,constipation,Mucus_in_your_poop_(may llok whitish),pain_in_your_flank,pelvic_area,foul_smelling_pee,urinary_incontinence,frequent_urination,pain_when_you_pee,blood_in_your_pee,chest_pain_when_breathing,_when_coughing,altered_mental_status,fatigue,prognosis
+1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,ommon Cold
+1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,Influenza
+0,1,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,Asthma
+0,0,0,0,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,Hypertension (High Blood Pressure)
+0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,Coronary Artery Disease(CAD)
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,Osteoarthritis
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,Irritable Bowel Syndrome (IBS)
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,1,0,0,0,0,Urinary Tract Infection (UTI)
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,Urinary Tract Infection (UTI)
+0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,1,1,Pneumonia
+0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,1,Pneumonia

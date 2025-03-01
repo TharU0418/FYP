@@ -32,6 +32,7 @@ const MySymptoms = () => {
     });
     const data = await res.json();
     setSymptoms(data.symptoms);
+    console.log(`Relevant Symptoms for ${disease}: ` + data.symptoms)
   };
 
   useEffect(() => {
